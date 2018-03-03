@@ -1,0 +1,21 @@
+{
+  "name": "GitHubFollowers",
+  "description": "Find github followers from Google Assistant",
+  "version": "0.0.1",
+  "private": true,
+  "license": "MIT",
+  "author": "Matteo Hertel <info@matteohetel.com",
+  "engines": {
+    "node": "~6.0"
+  },
+  "scripts": {
+    "start": "firebase serve --only functions:dialogflowFirebaseFulfillment",
+    "deploy": "firebase deploy --only functions:dialogflowFirebaseFulfillment"
+  },
+  "dependencies": {
+    "actions-on-google": "^1.5.x",
+    "firebase-admin": "^4.2.1",
+    "firebase-functions": "^0.5.7",
+    "apiai": "^4.0.3"
+  }
+}
