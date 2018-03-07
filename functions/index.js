@@ -1,6 +1,6 @@
 "use strict";
 
-const fetch = require("node-fetch");
+const nodeFetch = require("node-fetch");
 const functions = require("firebase-functions"); // Cloud Functions for Firebase library
 const DialogflowApp = require("actions-on-google").DialogflowApp; // Google Assistant helper library
 exports.dialogflowFirebaseFulfillment = functions.https.onRequest(
@@ -58,12 +58,14 @@ function processV1Request(request, response) {
     // Default handler for unknown or undefined actions
     default: () => {
       function getGitHubFollowers(username) {
-        return fetch(`https://api.github.com/users/${username}`).then(res => {
-          if (res.status !== 200) {
-            Throw("Failed to fetch info");
+        return nodeFetch(`https://api.github.com/users/${username}`).then(
+          res => {
+            if (res.status !== 200) {
+              throw new Error("Failed to fetch info");
+            }
+            return res.json();
           }
-          return res.json();
-        });
+        );
       }
       function dispatchResponse(responseToUser) {
         if (requestSource === googleAssistantRequest) {
@@ -146,33 +148,3 @@ function processV1Request(request, response) {
     }
   }
 }
-// Construct rich response for Google Assistant (v1 requests only)
-const app = new DialogflowApp();
-const googleRichResponse = app
-  .buildRichResponse()
-  .addSimpleResponse("This is the first simple response for Google Assistant")
-  .addSuggestions(["Suggestion Chip", "Another Suggestion Chip"])
-  // Create a basic card and add it to the rich response
-  .addBasicCard(
-    app
-      .buildBasicCard(
-        `This is a basic card.  Text in a
- basic card can include "quotes" and most other unicode characters
- including emoji 📱.  Basic cards also support some markdown
- formatting like *emphasis* or _italics_, **strong** or __bold__,
- and ***bold itallic*** or ___strong emphasis___ as well as other things
- like line  \nbreaks`
-      ) // Note the two spaces before '\n' required for a
-      // line break to be rendered in the card
-      .setSubtitle("This is a subtitle")
-      .setTitle("Title: this is a title")
-      .addButton("This is a button", "https://assistant.google.com/")
-      .setImage(
-        "https://developers.google.com/actions/images/badges/XPM_BADGING_GoogleAssistant_VER.png",
-        "Image alternate text"
-      )
-  )
-  .addSimpleResponse({
-    speech: "This is another simple response",
-    displayText: "This is the another simple response 💁"
-  });
