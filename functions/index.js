@@ -103,7 +103,7 @@ function processV1Request(request, response) {
   // Function to send correctly formatted Google Assistant responses to Dialogflow which are then sent to the user
   function sendGoogleResponse(responseToUser) {
     if (typeof responseToUser === "string") {
-      app.ask(responseToUser); // Google Assistant response
+      app.tell(responseToUser); // Google Assistant response
     } else {
       // If speech or displayText is defined use it to respond
       let googleResponse = app.buildRichResponse().addSimpleResponse({
